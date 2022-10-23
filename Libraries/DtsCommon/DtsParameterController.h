@@ -11,7 +11,16 @@ typedef struct
     DBool bIsInitialized;
 } DtsParameterController;
 
-DBool dtsParameterControllerInitialize(DtsParameterController* pController, DtsParameter* pParameters, DUInt16 nParameterCount);
-DBool dtsParameterControllerFind(DtsParameterController* pController, DUInt16 nId, DtsParameter** ppParameter);
+DBool dtsParameterControllerInitialize(
+    DtsParameterController* pController,
+    DtsParameter* pParameters,
+    DUInt16 nParameterCount
+);
+
+DBool dtsParameterControllerFind(
+    DtsParameterController* pController,
+    DUInt16 nId,
+    DtsParameter** ppParameter
+);
 
 #endif // DTSPARAMETERCONTROLLER_H

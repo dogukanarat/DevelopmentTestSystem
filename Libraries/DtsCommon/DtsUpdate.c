@@ -1,15 +1,18 @@
 #include "DtsCommon/DtsUpdate.h"
+#include "DtsCommon/DtsUtilities.h"
 
-DBool dtsUpdateForBool(DtsParameterController* pControler, DUInt16 nId, DBool bDefaultValue)
+DBool dtsUpdateForBool(DtsParameterController *pControler, DUInt16 nId, DBool bDefaultValue)
 {
     DBool finalParameter = bDefaultValue;
 
-    if(pControler != NULL)
+    if (pControler != NULL)
     {
-        DtsParameter* pParameter = NULL;
-        if(dtsParameterControllerFind(pControler, nId, &pParameter) == TRUE)
+        DtsParameter *pParameter = NULL;
+        if (TRUE == dtsParameterControllerFind(pControler, nId, &pParameter))
         {
-            if(pParameter->nSize == sizeof(DBool))
+            if (
+                sizeof(DBool) == pParameter->nSize &&
+                DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
                 finalParameter = (DBool)(pParameter->nData);
             }
@@ -31,17 +34,19 @@ DBool dtsUpdateForBool(DtsParameterController* pControler, DUInt16 nId, DBool bD
     return finalParameter;
 }
 
-DInt32 dtsUpdateForInt32(DtsParameterController* pControler, DUInt16 nId, DInt32 nDefaultValue)
+DInt32 dtsUpdateForInt32(DtsParameterController *pControler, DUInt16 nId, DInt32 nDefaultValue)
 {
     DInt32 finalParameter = nDefaultValue;
 
-    if(pControler != NULL)
+    if (pControler != NULL)
     {
-        DtsParameter* pParameter = NULL;
+        DtsParameter *pParameter = NULL;
 
-        if(dtsParameterControllerFind(pControler, nId, &pParameter) == TRUE)
+        if (dtsParameterControllerFind(pControler, nId, &pParameter) == TRUE)
         {
-            if(pParameter->nSize == sizeof(DInt32))
+            if (
+                sizeof(DInt32) == pParameter->nSize &&
+                DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
                 finalParameter = (DInt32)(pParameter->nData);
             }
@@ -63,33 +68,51 @@ DInt32 dtsUpdateForInt32(DtsParameterController* pControler, DUInt16 nId, DInt32
     return finalParameter;
 }
 
-DFloat64 dtsUpdateForFloat64(DtsParameterController* pControler, DUInt16 nId, DFloat64 dDefaultValue)
+DFloat64 dtsUpdateForFloat64(DtsParameterController *pControler, DUInt16 nId, DFloat64 dDefaultValue)
 {
     DFloat64 finalParameter = dDefaultValue;
 
-    if(pControler != NULL)
+    if (pControler != NULL)
     {
-        DtsParameter* pParameter = NULL;
+        DtsParameter *pParameter = NULL;
 
-        if(dtsParameterControllerFind(pControler, nId, &pParameter) == TRUE)
+        if (dtsParameterControllerFind(pControler, nId, &pParameter) == TRUE)
         {
-            if(pParameter->nSize == sizeof(DFloat64))
+            if (
+                pParameter->nSize == sizeof(DFloat64) &&
+                DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
-                finalParameter = (DFloat64)(pParameter->nData);
+                dtsMemCopy(
+                    (DVoidPointer)&finalParameter,
+                    (DConstVoidPointer)&pParameter->nData, 
+                    sizeof(DFloat64)
+                    );
             }
             else
             {
-                finalParameter = dDefaultValue;
+                dtsMemCopy(
+                    (DVoidPointer)&finalParameter,
+                    (DConstVoidPointer)&dDefaultValue,
+                    sizeof(DFloat64)
+                    );
             }
         }
         else
         {
-            finalParameter = dDefaultValue;
+            dtsMemCopy(
+                    (DVoidPointer)&finalParameter,
+                    (DConstVoidPointer)&dDefaultValue,
+                    sizeof(DFloat64)
+                    );
         }
     }
     else
     {
-        finalParameter = dDefaultValue;
+        dtsMemCopy(
+                    (DVoidPointer)&finalParameter,
+                    (DConstVoidPointer)&dDefaultValue,
+                    sizeof(DFloat64)
+                    );
     }
 
     return finalParameter;
