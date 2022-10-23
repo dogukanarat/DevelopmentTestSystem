@@ -25,6 +25,7 @@ add_executable(
     TestDtsIterator.cpp
     TestDtsParameterController.cpp
     TestDtsParameterController.h
+    TestProjectSpesificCommon.cpp
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)
