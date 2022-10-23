@@ -2,7 +2,13 @@
 #include "DtsCommon/DtsUtilities.h"
 #include <string.h>
 
-DBool dtsIteratorInitialize(DtsIterator *self, DBytePointer pRawBuffer, DUInt32 nRawBufferSize,  DtsIteratorType eType)
+DBool dtsIteratorInitialize(
+    DtsIterator *self,
+    DBytePointer pRawBuffer,
+    DUInt32 nRawBufferSize,
+    DtsIteratorType eType,
+    DInt32 nBlockSize
+    )
 {
     DBool result = FALSE;
 
@@ -83,6 +89,66 @@ DBool dtsIteratorRead(DtsIterator *self, DBytePointer pValue, DSize nValueSize)
             dtsMemCopy(destination, source, nValueSize);
 
             self->nCurrentIndex += nValueSize;
+            result = TRUE;
+        }
+        else
+        {
+            result = FALSE;
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
+DBool dtsIteratorNext(DtsIterator *self, DBytePointer *ppValue)
+{
+    DBool result = FALSE;
+
+    if(
+        self != NULL &&
+        ppValue != NULL &&
+        self->bIsInitialized == TRUE &&
+        self->eType == DTS_ITERATOR_FORWARD
+        )
+    {
+        if(self->nCurrentIndex + self->nBlockSize <= self->nRawBufferSize)
+        {
+            *ppValue = self->pRawBuffer + self->nCurrentIndex;
+            self->nCurrentIndex += self->nBlockSize;
+            result = TRUE;
+        }
+        else
+        {
+            result = FALSE;
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
+DBool dtsIteratorPrevious(DtsIterator *self, DBytePointer *ppValue)
+{
+    DBool result = FALSE;
+
+    if(
+        self != NULL &&
+        ppValue != NULL &&
+        self->bIsInitialized == TRUE &&
+        self->eType == DTS_ITERATOR_BACKWARD
+        )
+    {
+        if(self->nCurrentIndex >= self->nBlockSize)
+        {
+            self->nCurrentIndex -= self->nBlockSize;
+            *ppValue = self->pRawBuffer + self->nCurrentIndex;
             result = TRUE;
         }
         else

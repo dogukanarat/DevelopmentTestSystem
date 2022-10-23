@@ -87,35 +87,31 @@ DFloat64 dtsUpdateForFloat64(DtsParameterController *pControler, DUInt16 nId, DF
             {
                 dtsMemCopy(
                     (DVoidPointer)&finalParameter,
-                    (DConstVoidPointer)&pParameter->nData, 
-                    sizeof(DFloat64)
-                    );
+                    (DConstVoidPointer)&pParameter->nData,
+                    sizeof(DFloat64));
             }
             else
             {
                 dtsMemCopy(
                     (DVoidPointer)&finalParameter,
                     (DConstVoidPointer)&dDefaultValue,
-                    sizeof(DFloat64)
-                    );
+                    sizeof(DFloat64));
             }
         }
         else
         {
             dtsMemCopy(
-                    (DVoidPointer)&finalParameter,
-                    (DConstVoidPointer)&dDefaultValue,
-                    sizeof(DFloat64)
-                    );
+                (DVoidPointer)&finalParameter,
+                (DConstVoidPointer)&dDefaultValue,
+                sizeof(DFloat64));
         }
     }
     else
     {
         dtsMemCopy(
-                    (DVoidPointer)&finalParameter,
-                    (DConstVoidPointer)&dDefaultValue,
-                    sizeof(DFloat64)
-                    );
+            (DVoidPointer)&finalParameter,
+            (DConstVoidPointer)&dDefaultValue,
+            sizeof(DFloat64));
     }
 
     return finalParameter;

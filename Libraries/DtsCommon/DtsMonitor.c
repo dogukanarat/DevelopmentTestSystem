@@ -85,7 +85,7 @@ DBool dtsMonitorForFloat64(DtsParameterController* pControler, DUInt16 nId, DFlo
                 pParameter->bIsMonitorable == TRUE
                 )
             {
-                dtsMemCopy(&pParameter->nData, &dCurrentValue, sizeof(DFloat64));
+                dtsMemCopy((DVoidPointer)&pParameter->nData, (DConstVoidPointer)&dCurrentValue, sizeof(DFloat64));
                 result = TRUE;
             }
             else
