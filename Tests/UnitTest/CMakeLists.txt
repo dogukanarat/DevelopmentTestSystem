@@ -23,6 +23,8 @@ add_executable(
     TestDtsUtilities.cpp
     TestDtsCircularBuffer.cpp
     TestDtsIterator.cpp
+    TestDtsParameterController.cpp
+    TestDtsParameterController.h
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)

@@ -42,8 +42,8 @@ DBool dtsIteratorWrite(DtsIterator *self, DConstBytePointer pValue, DSize nValue
     {
         if(self->nCurrentIndex + nValueSize <= self->nRawBufferSize)
         {
-            DVoidPointer pDestination = self->pRawBuffer + self->nCurrentIndex;
-            DConstVoidPointer pSource = pValue;
+            DVoidPointer pDestination = (DVoidPointer)(self->pRawBuffer + self->nCurrentIndex);
+            DConstVoidPointer pSource = (DConstVoidPointer)(pValue);
 
             dtsMemCopy(pDestination, pSource, nValueSize);
             
@@ -77,8 +77,8 @@ DBool dtsIteratorRead(DtsIterator *self, DBytePointer pValue, DSize nValueSize)
     {
         if(self->nCurrentIndex + nValueSize <= self->nRawBufferSize)
         {
-            DVoidPointer destination = pValue;
-            DConstVoidPointer source = self->pRawBuffer + self->nCurrentIndex;
+            DVoidPointer destination = (DVoidPointer)(pValue);
+            DConstVoidPointer source = (DConstVoidPointer)(self->pRawBuffer + self->nCurrentIndex);
 
             dtsMemCopy(destination, source, nValueSize);
 
