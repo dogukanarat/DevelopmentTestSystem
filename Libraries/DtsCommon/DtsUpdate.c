@@ -12,6 +12,7 @@ DBool dtsUpdateForBool(DtsParameterController *pControler, DUInt16 nId, DBool bD
         {
             if (
                 sizeof(DBool) == pParameter->nSize &&
+                pParameter->bIsUpdatable == TRUE &&
                 DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
                 finalParameter = (DBool)(pParameter->nData);
@@ -46,6 +47,7 @@ DInt32 dtsUpdateForInt32(DtsParameterController *pControler, DUInt16 nId, DInt32
         {
             if (
                 sizeof(DInt32) == pParameter->nSize &&
+                pParameter->bIsUpdatable == TRUE &&
                 DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
                 finalParameter = (DInt32)(pParameter->nData);
@@ -80,6 +82,7 @@ DFloat64 dtsUpdateForFloat64(DtsParameterController *pControler, DUInt16 nId, DF
         {
             if (
                 pParameter->nSize == sizeof(DFloat64) &&
+                pParameter->bIsUpdatable == TRUE &&
                 DTS_PARAMETER_STATE_UPDATE == pParameter->eState)
             {
                 dtsMemCopy(

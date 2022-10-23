@@ -20,6 +20,7 @@ target_sources(
         DtsParameterController.c
         DtsSettings.c
         DtsUpdate.c
+        DtsMonitor.c
 )
 
 target_include_directories(
