@@ -28,6 +28,7 @@ add_executable(
     TestProjectSpesificCommon.cpp
     TestDtsUpdate.cpp
     TestDtsMonitor.cpp
+    TestDtsProtocol.cpp
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)

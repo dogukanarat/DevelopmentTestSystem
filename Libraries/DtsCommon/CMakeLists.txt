@@ -21,6 +21,7 @@ target_sources(
         DtsSettings.c
         DtsUpdate.c
         DtsMonitor.c
+        DtsProtocol.c
 )
 
 target_include_directories(
