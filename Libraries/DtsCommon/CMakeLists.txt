@@ -15,6 +15,8 @@ target_sources(
         DtsCommon.c
         DtsUtilities.c
         DtsCircularBuffer.c
+        DtsIterator.c
+        DtsProtocol.c
 )
 
 target_include_directories(

@@ -86,7 +86,7 @@ DBool dtsCircularBufferPush(DtsCircularBuffer *self, DConstBytePointer pSource, 
             nSecondCopySize = 0;
         }
 
-        memCopy(
+        dtsMemCopy(
             (DVoidPointer)(self->pBuffer + self->nBufferTail),
             (DConstVoidPointer)(pSource),
             nFirstCopySize);
@@ -99,7 +99,7 @@ DBool dtsCircularBufferPush(DtsCircularBuffer *self, DConstBytePointer pSource, 
 
         if (nSecondCopySize > 0)
         {
-            memCopy(
+            dtsMemCopy(
                 (DVoidPointer)(self->pBuffer + self->nBufferTail),
                 (DConstVoidPointer)(pSource + nFirstCopySize),
                 nSecondCopySize);
@@ -147,7 +147,7 @@ DBool dtsCircularBufferPop(DtsCircularBuffer *self, DBytePointer pDestination, D
             nSecondCopySize = 0;
         }
 
-        memCopy(
+        dtsMemCopy(
             (DVoidPointer)(pDestination),
             (DConstVoidPointer)(self->pBuffer + self->nBufferHead),
             nFirstCopySize);
@@ -160,7 +160,7 @@ DBool dtsCircularBufferPop(DtsCircularBuffer *self, DBytePointer pDestination, D
 
         if (nSecondCopySize > 0)
         {
-            memCopy(
+            dtsMemCopy(
                 (DVoidPointer)(pDestination + nFirstCopySize),
                 (DConstVoidPointer)(self->pBuffer + self->nBufferHead),
                 nSecondCopySize);

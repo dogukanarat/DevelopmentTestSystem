@@ -20,7 +20,9 @@ include(GoogleTest)
 add_executable(
     DtsUnitTest
     Main.cpp
+    TestDtsUtilities.cpp
     TestDtsCircularBuffer.cpp
+    TestDtsIterator.cpp
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)

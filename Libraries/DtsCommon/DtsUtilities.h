@@ -8,13 +8,19 @@
 /// @param value 
 /// @param length 
 /// @return 
-DVoidPointer memSet(DVoidPointer destination, DInt32 value, DSize length);
+DVoidPointer dtsMemSet(DVoidPointer destination, DInt32 value, DSize length);
 
 /// @brief
 /// @param destination
 /// @param source
 /// @param length
 /// @return
-DVoidPointer memCopy(DVoidPointer destination, DConstVoidPointer source, DSize length);
+DVoidPointer dtsMemCopy(DVoidPointer destination, DConstVoidPointer source, DSize length);
+
+/// @brief
+/// @param pValue
+/// @param nValueSize
+/// @return
+DBool dtsSwap(DVoidPointer pValue, DSize nValueSize);
 
 #endif // INCLUDED_DTSUTILITIES_H

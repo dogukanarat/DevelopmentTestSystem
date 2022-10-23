@@ -50,4 +50,13 @@ typedef const DBytePointer DConstBytePointer;
 typedef DUInt32 DSize;
 #endif
 
+#ifndef DTS_ENDIAN_DEFINITION
+#define DTS_ENDIAN_DEFINITION
+typedef enum
+{
+    DTS_ENDIAN_LITTLE = 0,
+    DTS_ENDIAN_BIG
+} DtsEndian;
+#endif
+
 #endif // INCLUDED_DTSCOMMON_H
