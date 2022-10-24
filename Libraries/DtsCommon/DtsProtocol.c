@@ -47,7 +47,7 @@ DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParam
     return result;
 }
 
-DBool dtsProtocolSetMonitorParameters(DtsIterator* pIterator, const DtsParameterController* pController)
+DBool dtsProtocolCreateMonitorMessage(DtsIterator* pIterator, const DtsParameterController* pController)
 {
     DBool result = FALSE;
 
@@ -61,7 +61,8 @@ DBool dtsProtocolSetMonitorParameters(DtsIterator* pIterator, const DtsParameter
             (DBytePointer)pController->pParameters,
             pController->nParameterCount * sizeof(DtsParameter),
             DTS_ITERATOR_FORWARD,
-            sizeof(DtsParameter));
+            sizeof(DtsParameter)
+            );
         
         while(dtsIteratorNext(&itParameters, (DBytePointer*)&pParameter) == TRUE)
         {

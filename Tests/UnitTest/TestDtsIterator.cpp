@@ -216,3 +216,45 @@ TEST(DtsIteratorTest, dtsIteratorReadWithSmallChunks)
 
     EXPECT_EQ(FALSE, result);
 }
+
+TEST(DtsIteratorTest, dtsIteratorForwardIterator)
+{
+    typedef struct
+    {
+        DInt16 nValue1;
+        DInt32 nValue2;
+    } DtsTestStruct;
+
+    DtsTestStruct pTestStruct[12];
+
+    for(DSize i = 0; i < 12; i++)
+    {
+        pTestStruct[i].nValue1 = i;
+        pTestStruct[i].nValue2 = i * 2 + 1;
+    }
+
+    DtsIterator iterator;
+
+    dtsIteratorInitialize(
+        &iterator,
+        (DBytePointer)pTestStruct,
+        sizeof(pTestStruct),
+        DTS_ITERATOR_FORWARD,
+        sizeof(DtsTestStruct)
+        );
+
+    DtsTestStruct* pActualTestStruct;
+
+    for(DSize i = 0; i < 12; i++)
+    {
+        DBool result = dtsIteratorNext(&iterator, (DBytePointer*)&pActualTestStruct);
+
+        EXPECT_EQ(TRUE, result);
+
+        EXPECT_EQ(&pTestStruct[i], pActualTestStruct);
+    }
+
+    DBool lastResult = dtsIteratorNext(&iterator, (DBytePointer*)&pActualTestStruct);
+
+    EXPECT_EQ(FALSE, lastResult);
+}

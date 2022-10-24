@@ -76,7 +76,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetParameter)
     EXPECT_EQ(0x12, pRawBuffer[7]);
 }
 
-TEST_F(TestDtsProtocol, dtsProtocolSetMonitorParameters)
+TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
 {
     DByte pRawBuffer[128];
     DtsIterator iterator;
@@ -100,7 +100,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetMonitorParameters)
     m_parameterController.pParameters[PRIVATE_PARAMETER_2_INT].nData = 0x12345678;
     m_parameterController.pParameters[PRIVATE_PARAMETER_3_BOOL].nData = TRUE;
 
-    result = dtsProtocolSetMonitorParameters(&iterator, &m_parameterController);
+    result = dtsProtocolCreateMonitorMessage(&iterator, &m_parameterController);
 
     EXPECT_EQ(TRUE, result);
 
@@ -108,7 +108,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetMonitorParameters)
 
     // PRIVATE_PARAMETER_1_DEC
     // Parameter Id
-    EXPECT_EQ(0x01, pRawBuffer[counter++]);
+    EXPECT_EQ(0x00, pRawBuffer[counter++]);
     EXPECT_EQ(0x00, pRawBuffer[counter++]);
 
     // Parameter Size
@@ -127,7 +127,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetMonitorParameters)
 
     // PRIVATE_PARAMETER_2_INT
     // Parameter Id
-    EXPECT_EQ(0x02, pRawBuffer[counter++]);
+    EXPECT_EQ(0x01, pRawBuffer[counter++]);
     EXPECT_EQ(0x00, pRawBuffer[counter++]);
 
     // Parameter Size
@@ -142,7 +142,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetMonitorParameters)
 
     // PRIVATE_PARAMETER_3_BOOL
     // Parameter Id
-    EXPECT_EQ(0x01, pRawBuffer[counter++]);
+    EXPECT_EQ(0x02, pRawBuffer[counter++]);
     EXPECT_EQ(0x00, pRawBuffer[counter++]);
 
     // Parameter Size

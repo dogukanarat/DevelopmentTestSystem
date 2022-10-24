@@ -14,12 +14,33 @@ DBool dtsIteratorInitialize(
 
     if(self != NULL && pRawBuffer != NULL && nRawBufferSize > 0)
     {
-        self->pRawBuffer = pRawBuffer;
-        self->nRawBufferSize = nRawBufferSize;
-        self->nCurrentIndex = 0;
-        self->eType = eType;
-        self->bIsInitialized = TRUE;
-        result = TRUE;
+        DBool isForwardBackwardIterator = FALSE;
+
+        if(eType == DTS_ITERATOR_FORWARD)
+        {
+            isForwardBackwardIterator = TRUE;
+        }
+        else {}
+
+        if(isForwardBackwardIterator == TRUE && nBlockSize > 0)
+        {
+            result = TRUE;
+        }
+        else
+        {
+            result = FALSE;
+        }
+
+        if(isForwardBackwardIterator == FALSE || result == TRUE)
+        {
+            self->pRawBuffer = pRawBuffer;
+            self->nRawBufferSize = nRawBufferSize;
+            self->nCurrentIndex = 0;
+            self->eType = eType;
+            self->bIsInitialized = TRUE;
+            self->nBlockSize = nBlockSize;
+            result = TRUE;
+        }
     }
     else
     {
@@ -138,28 +159,28 @@ DBool dtsIteratorPrevious(DtsIterator *self, DBytePointer *ppValue)
 {
     DBool result = FALSE;
 
-    if(
-        self != NULL &&
-        ppValue != NULL &&
-        self->bIsInitialized == TRUE &&
-        self->eType == DTS_ITERATOR_BACKWARD
-        )
-    {
-        if(self->nCurrentIndex >= self->nBlockSize)
-        {
-            self->nCurrentIndex -= self->nBlockSize;
-            *ppValue = self->pRawBuffer + self->nCurrentIndex;
-            result = TRUE;
-        }
-        else
-        {
-            result = FALSE;
-        }
-    }
-    else
-    {
-        result = FALSE;
-    }
+    // if(
+    //     self != NULL &&
+    //     ppValue != NULL &&
+    //     self->bIsInitialized == TRUE &&
+    //     self->eType == DTS_ITERATOR_BACKWARD
+    //     )
+    // {
+    //     if(self->nCurrentIndex >= self->nBlockSize)
+    //     {
+    //         self->nCurrentIndex -= self->nBlockSize;
+    //         *ppValue = self->pRawBuffer + self->nCurrentIndex;
+    //         result = TRUE;
+    //     }
+    //     else
+    //     {
+    //         result = FALSE;
+    //     }
+    // }
+    // else
+    // {
+    //     result = FALSE;
+    // }
 
     return result;
 }

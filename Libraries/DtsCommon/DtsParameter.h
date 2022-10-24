@@ -9,6 +9,7 @@ typedef enum
     DTS_PARAMETER_STATE_UPDATE,
 } DtsParameterState;
 
+#pragma pack(push, 1)
 typedef struct 
 {
     DInt16 nId;
@@ -18,5 +19,6 @@ typedef struct
     DBool bIsUpdatable;
     DtsParameterState eState;
 } DtsParameter;
+#pragma pack(pop)
 
 #endif // INCLUDED_DTSPARAMETER_H

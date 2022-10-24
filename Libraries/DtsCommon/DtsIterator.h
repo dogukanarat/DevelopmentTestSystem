@@ -10,7 +10,6 @@ typedef enum
     DTS_ITERATOR_WRITE,
     DTS_ITERATOR_READ,
     DTS_ITERATOR_FORWARD,
-    DTS_ITERATOR_BACKWARD,
 } DtsIteratorType;
 
 typedef struct

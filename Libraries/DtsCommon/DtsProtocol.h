@@ -11,6 +11,6 @@ DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSiz
 
 DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParameter);
 
-DBool dtsProtocolSetMonitorParameters(DtsIterator* pIterator, const DtsParameterController* pController);
+DBool dtsProtocolCreateMonitorMessage(DtsIterator* pIterator, const DtsParameterController* pController);
 
 #endif // INCLUDED_DTSPROTOCOL_H
