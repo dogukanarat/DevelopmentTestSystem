@@ -60,6 +60,29 @@ DUInt32 dtsIteratorGetSize(DtsIterator *self)
     return self->nCurrentIndex;
 }
 
+DBool dtsIteratorGetPointer(DtsIterator *self, DUInt16 nIndex, DBytePointer* pResult)
+{
+    DBool result = FALSE;
+
+    if(self != NULL && pResult != NULL)
+    {
+        if(nIndex < self->nCurrentIndex)
+        {
+            *pResult = self->pRawBuffer + (nIndex * self->nBlockSize);
+            result = TRUE;
+        }
+        else
+        {
+            result = FALSE;
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+    return result;
+}
+
 DBool dtsIteratorReset(DtsIterator *self)
 {
     DBool result = FALSE;
@@ -198,36 +221,6 @@ DBool dtsIteratorNext(DtsIterator *self, DBytePointer *ppValue)
     {
         result = FALSE;
     }
-
-    return result;
-}
-
-DBool dtsIteratorPrevious(DtsIterator *self, DBytePointer *ppValue)
-{
-    DBool result = FALSE;
-
-    // if(
-    //     self != NULL &&
-    //     ppValue != NULL &&
-    //     self->bIsInitialized == TRUE &&
-    //     self->eType == DTS_ITERATOR_BACKWARD
-    //     )
-    // {
-    //     if(self->nCurrentIndex >= self->nBlockSize)
-    //     {
-    //         self->nCurrentIndex -= self->nBlockSize;
-    //         *ppValue = self->pRawBuffer + self->nCurrentIndex;
-    //         result = TRUE;
-    //     }
-    //     else
-    //     {
-    //         result = FALSE;
-    //     }
-    // }
-    // else
-    // {
-    //     result = FALSE;
-    // }
 
     return result;
 }

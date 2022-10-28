@@ -32,10 +32,10 @@ DBool dtsIteratorInitialize(
 
 DUInt32 dtsIteratorGetSize(DtsIterator *self);
 DBool dtsIteratorReset(DtsIterator *self);
+DBool dtsIteratorGetPointer(DtsIterator *self, DUInt16 nIndex, DBytePointer* pResult);
 DBool dtsIteratorReserve(DtsIterator *self, DBytePointer *ppPointer, DUInt32 nSize);
 DBool dtsIteratorWrite(DtsIterator *self, DConstBytePointer pValue, DSize nValueSize);
 DBool dtsIteratorRead(DtsIterator *self, DBytePointer pValue, DSize nValueSize);
 DBool dtsIteratorNext(DtsIterator *self, DBytePointer *ppValue);
-DBool dtsIteratorPrevious(DtsIterator *self, DBytePointer *ppValue);
 
 #endif

@@ -30,6 +30,7 @@ add_executable(
     TestDtsMonitor.cpp
     TestDtsProtocol.cpp
     TestDtsServer.cpp
+    TestDtsTimeline.cpp
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)

@@ -23,6 +23,7 @@ target_sources(
         DtsMonitor.c
         DtsProtocol.c
         DtsServer.c
+        DtsTimeline.c
 )
 
 target_include_directories(
