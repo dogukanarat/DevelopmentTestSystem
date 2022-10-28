@@ -18,5 +18,6 @@ typedef enum
 
 // This declaration is project spesific
 extern DtsParameter g_projectParameters[PRIVATE_PARAMETER_COUNT];
+extern DtsParameter g_projectParametersClient[PRIVATE_PARAMETER_COUNT];
 
 #endif // TESTPROJECTSPESIFICCOMMON_H

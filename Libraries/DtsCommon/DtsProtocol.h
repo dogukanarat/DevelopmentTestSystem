@@ -18,10 +18,8 @@ DBool dtsProtocolCreateDiscoveryMessage(DtsIterator* pIterator);
 
 DBool dtsProtocolResolveDiscoveryMessage(DtsIterator* pIterator);
 
-DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSize nValueSize);
-
-DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParameter);
-
 DBool dtsProtocolCreateMonitorMessage(DtsIterator* pIterator, const DtsParameterController* pController);
+
+DBool dtsProtocolResolveMonitorMessage(DtsIterator* pIterator, DtsParameterController* pController);
 
 #endif // INCLUDED_DTSPROTOCOL_H

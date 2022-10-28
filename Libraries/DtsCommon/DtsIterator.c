@@ -77,6 +77,31 @@ DBool dtsIteratorReset(DtsIterator *self)
     return result;
 }
 
+DBool dtsIteratorReserve(DtsIterator *self, DBytePointer *ppPointer, DUInt32 nSize)
+{
+    DBool result = FALSE;
+
+    if(self != NULL && ppPointer != NULL && nSize > 0)
+    {
+        if(self->nCurrentIndex + nSize <= self->nRawBufferSize)
+        {
+            *ppPointer = self->pRawBuffer + self->nCurrentIndex;
+            self->nCurrentIndex += nSize;
+            result = TRUE;
+        }
+        else
+        {
+            result = FALSE;
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
 DBool dtsIteratorWrite(DtsIterator *self, DConstBytePointer pValue, DSize nValueSize)
 {
     DBool result = FALSE;

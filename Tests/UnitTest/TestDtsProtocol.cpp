@@ -1,5 +1,12 @@
 #include "TestDtsProtocol.h"
 
+extern "C"
+{
+// Private declarations
+DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSize nValueSize);
+DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParameter);
+}
+
 TEST_F(TestDtsProtocol, dtsProtocolSetHeader)
 {
     DByte pRawBuffer[128];
@@ -106,9 +113,15 @@ TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
 
     DUInt16 counter = 0;
 
+    DUInt16 parameterCount = 3;
+
     // Header
     EXPECT_EQ(DTS_PROTOCOL_MONITOR_HEADER & 0x00FF, pRawBuffer[counter++]);
     EXPECT_EQ(DTS_PROTOCOL_MONITOR_HEADER & 0xFF00, pRawBuffer[counter++]);
+
+    // Parameter Count
+    EXPECT_EQ(parameterCount & 0x00FF, pRawBuffer[counter++]);
+    EXPECT_EQ(parameterCount & 0xFF00, pRawBuffer[counter++]);
 
     // PRIVATE_PARAMETER_1_DEC
     // Parameter Id
@@ -155,6 +168,70 @@ TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
 
     // Parameter Value
     EXPECT_EQ(0x01, pRawBuffer[counter++]);
+}
+
+TEST_F(TestDtsProtocol, dtsProtocolResolveMonitorMessage)
+{
+    DByte pRawBuffer[128];
+    DtsIterator iteratorWrite;
+    DtsIterator iteratorRead;
+    DBool result = FALSE;
+
+    result = dtsIteratorInitialize(&iteratorWrite, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    EXPECT_EQ(TRUE, result);
+
+    result = dtsIteratorInitialize(&iteratorRead, pRawBuffer, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    EXPECT_EQ(TRUE, result);
+
+    DFloat64 decimalValue = 0x12345678;
+    DByte decimalValueByteArray[8];
+
+    memcpy(decimalValueByteArray, &decimalValue, sizeof(decimalValue));
+
+    memcpy(
+        &m_parameterController.pParameters[PRIVATE_PARAMETER_1_DEC].nData,
+        &decimalValue, 
+        sizeof(decimalValue)
+        );
+
+    m_parameterController.pParameters[PRIVATE_PARAMETER_2_INT].nData = 0x12345678;
+    m_parameterController.pParameters[PRIVATE_PARAMETER_3_BOOL].nData = TRUE;
+
+    result = dtsProtocolCreateMonitorMessage(&iteratorWrite, &m_parameterController);
+
+    EXPECT_EQ(result, TRUE);
+
+    DtsParameterController parameterController;
+
+    result = dtsParameterControllerInitialize(
+        &parameterController,
+        g_projectParametersClient,
+        PRIVATE_PARAMETER_COUNT
+        );
+
+    EXPECT_EQ(result, TRUE);
+
+    result = dtsProtocolResolveMonitorMessage(&iteratorRead, &parameterController);
+
+    EXPECT_EQ(result, TRUE);
+
+    EXPECT_EQ(
+        m_parameterController.pParameters[PRIVATE_PARAMETER_1_DEC].nData,
+        parameterController.pParameters[PRIVATE_PARAMETER_1_DEC].nData
+        );
+    
+    EXPECT_EQ(
+        m_parameterController.pParameters[PRIVATE_PARAMETER_2_INT].nData,
+        parameterController.pParameters[PRIVATE_PARAMETER_2_INT].nData
+        );
+    
+    EXPECT_EQ(
+        m_parameterController.pParameters[PRIVATE_PARAMETER_3_BOOL].nData,
+        parameterController.pParameters[PRIVATE_PARAMETER_3_BOOL].nData
+        );
+
 }
 
 TEST_F(TestDtsProtocol, dtsProtocolCreateDiscoveryMessage)

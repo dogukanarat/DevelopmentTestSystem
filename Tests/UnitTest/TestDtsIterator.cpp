@@ -64,6 +64,23 @@ TEST(DtsIteratorTest, dtsIteratorGetSize)
     EXPECT_EQ(128, nSize);
 }
 
+TEST(DtsIteratorTest, dtsIteratorReserve)
+{
+    DByte pRawBuffer[128];
+    DtsIterator iterator;
+
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    DInt64* reversedValue = NULL;
+
+    DBool result = dtsIteratorReserve(&iterator, (DBytePointer*)&reversedValue, sizeof(DInt64));
+
+    EXPECT_EQ(TRUE, result);
+
+    EXPECT_EQ((DVoidPointer)pRawBuffer, (DVoidPointer)reversedValue);
+    EXPECT_EQ(sizeof(DInt64), iterator.nCurrentIndex);
+}
+
 TEST(DtsIteratorTest, dtsIteratorWrite)
 {
     DByte pRawBuffer[128];

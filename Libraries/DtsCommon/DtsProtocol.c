@@ -1,6 +1,11 @@
 #include "DtsCommon/DtsProtocol.h"
+#include "DtsCommon/DtsUtilities.h"
 
-DBool dtsProtocolSetHeader(DtsIterator* pIterator, DUInt16 nHeader)
+// Private declarations
+DBool dtsProtocolSetValue(DtsIterator *pIterator, DConstVoidPointer pValue, DSize nValueSize);
+DBool dtsProtocolSetParameter(DtsIterator *pIterator, const DtsParameter *pParameter);
+
+DBool dtsProtocolSetHeader(DtsIterator *pIterator, DUInt16 nHeader)
 {
     DBool result = FALSE;
 
@@ -16,7 +21,7 @@ DBool dtsProtocolSetHeader(DtsIterator* pIterator, DUInt16 nHeader)
     return result;
 }
 
-DBool dtsProtocolCreateDiscoveryMessage(DtsIterator* pIterator)
+DBool dtsProtocolCreateDiscoveryMessage(DtsIterator *pIterator)
 {
     DBool result = FALSE;
 
@@ -32,7 +37,7 @@ DBool dtsProtocolCreateDiscoveryMessage(DtsIterator* pIterator)
     return result;
 }
 
-DBool dtsProtocolResolveDiscoveryMessage(DtsIterator* pIterator)
+DBool dtsProtocolResolveDiscoveryMessage(DtsIterator *pIterator)
 {
     DBool result = FALSE;
     DUInt16 nHeader = 0;
@@ -65,7 +70,7 @@ DBool dtsProtocolResolveDiscoveryMessage(DtsIterator* pIterator)
     return result;
 }
 
-DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSize nValueSize)
+DBool dtsProtocolSetValue(DtsIterator *pIterator, DConstVoidPointer pValue, DSize nValueSize)
 {
     DBool result = FALSE;
 
@@ -81,7 +86,7 @@ DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSiz
     return result;
 }
 
-DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParameter)
+DBool dtsProtocolSetParameter(DtsIterator *pIterator, const DtsParameter *pParameter)
 {
     DBool result = FALSE;
 
@@ -96,36 +101,120 @@ DBool dtsProtocolSetParameter(DtsIterator* pIterator, const DtsParameter* pParam
     return result;
 }
 
-DBool dtsProtocolCreateMonitorMessage(DtsIterator* pIterator, const DtsParameterController* pController)
+DBool dtsProtocolCreateMonitorMessage(DtsIterator *pIterator, const DtsParameterController *pController)
 {
     DBool result = FALSE;
 
     if (pIterator != NULL && pController != NULL)
     {
         DtsIterator itParameters;
-        DtsParameter* pParameter = NULL;
+        DtsParameter *pParameter = NULL;
+        DUInt16 *pParameterCount = NULL;
 
         dtsIteratorInitialize(
             &itParameters,
             (DBytePointer)pController->pParameters,
             pController->nParameterCount * sizeof(DtsParameter),
             DTS_ITERATOR_FORWARD,
-            sizeof(DtsParameter)
-            );
-        
+            sizeof(DtsParameter));
+
         result = dtsProtocolSetHeader(pIterator, DTS_PROTOCOL_MONITOR_HEADER);
-        
-        while(dtsIteratorNext(&itParameters, (DBytePointer*)&pParameter) == TRUE)
+
+        if (result == TRUE)
         {
-            if(pParameter->bIsMonitorable == TRUE)
+            result = dtsIteratorReserve(pIterator, (DBytePointer*)&pParameterCount, sizeof(DUInt16));
+        }
+
+        if (result == TRUE)
+        {
+            *pParameterCount = 0;
+
+            while (dtsIteratorNext(&itParameters, (DBytePointer *)&pParameter) == TRUE)
             {
-                result = dtsProtocolSetParameter(pIterator, pParameter);
+                if (pParameter->bIsMonitorable == TRUE)
+                {
+                    result = dtsProtocolSetParameter(pIterator, pParameter);
+                    *pParameterCount += 1;
+                }
+                else
+                {
+                    // pass the parameter
+                    // no implementation
+                }
+                
             }
-            else
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    
+
+    return result;
+}
+
+DBool dtsProtocolResolveMonitorMessage(DtsIterator *pIterator, DtsParameterController *pController)
+{
+    DBool result = FALSE;
+    DUInt16 nHeader = 0;
+    DUInt16 nParameterCount = 0;
+
+    if (pIterator != NULL && pController != NULL)
+    {
+        result = dtsIteratorRead(pIterator, (DBytePointer)&nHeader, sizeof(nHeader));
+
+        if ( result == TRUE && nHeader == DTS_PROTOCOL_MONITOR_HEADER)
+        {
+            result = dtsIteratorRead(pIterator, (DBytePointer)&nParameterCount, sizeof(nParameterCount));
+        }
+        else
+        {
+            result = FALSE;
+        }
+
+        if (result == TRUE)
+        {
+            for(DUInt16 parameterCounter = 0; parameterCounter < nParameterCount; parameterCounter++)
             {
-                // pass the parameter
-                // no implementation
+                DtsParameter *pParameter = NULL;
+                DInt16 nId = 0;
+                DUInt16 nSize = 0;
+                DUInt64 nData = 0;
+
+                result = dtsIteratorRead(pIterator, (DBytePointer)&nId, sizeof(nId));
+
+                if (result == TRUE)
+                {
+                    result = dtsParameterControllerFind(pController, nId, &pParameter);
+                }
+                else
+                {
+                    break;
+                }
+
+                if( result == TRUE)
+                {
+                    result = dtsIteratorRead(pIterator, (DBytePointer)&nSize, sizeof(nSize));
+                }
+
+                if(result == TRUE)
+                {
+                    result = dtsIteratorRead(pIterator, (DBytePointer)&nData, nSize);
+                }
+
+                if(result == TRUE)
+                {
+                    dtsMemCopy(&pParameter->nData, &nData, nSize);
+                }
+
+                
             }
+        }
+        else
+        {
+            result = FALSE;
         }
     }
     else
