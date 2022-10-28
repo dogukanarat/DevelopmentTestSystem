@@ -27,7 +27,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate --target all install
+      run: cmake --build ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate
       
     - name: Test
       working-directory: ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate 
@@ -50,7 +50,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate --target all install
+      run: cmake --build ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate
     
     - name: Test
       working-directory: ${{github.workspace}}/Binaries/${{env.BUILD_TYPE}}/Intermediate 
