@@ -6,7 +6,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetHeader)
     DtsIterator iterator;
     DBool result = FALSE;
 
-    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(TRUE, result);
 
@@ -27,7 +27,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetValue)
     DInt32 nValue = 0x12345678;
     DBool result = FALSE;
 
-    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(TRUE, result);
 
@@ -49,7 +49,7 @@ TEST_F(TestDtsProtocol, dtsProtocolSetParameter)
     DtsIterator iterator;
     DBool result = FALSE;
 
-    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(TRUE, result);
 
@@ -82,7 +82,7 @@ TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
     DtsIterator iterator;
     DBool result = FALSE;
 
-    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(TRUE, result);
 
@@ -105,6 +105,10 @@ TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
     EXPECT_EQ(TRUE, result);
 
     DUInt16 counter = 0;
+
+    // Header
+    EXPECT_EQ(DTS_PROTOCOL_MONITOR_HEADER & 0x00FF, pRawBuffer[counter++]);
+    EXPECT_EQ(DTS_PROTOCOL_MONITOR_HEADER & 0xFF00, pRawBuffer[counter++]);
 
     // PRIVATE_PARAMETER_1_DEC
     // Parameter Id
@@ -151,4 +155,53 @@ TEST_F(TestDtsProtocol, dtsProtocolCreateMonitorMessage)
 
     // Parameter Value
     EXPECT_EQ(0x01, pRawBuffer[counter++]);
+}
+
+TEST_F(TestDtsProtocol, dtsProtocolCreateDiscoveryMessage)
+{
+    DByte pRawBuffer[128];
+    DtsIterator iterator;
+    DBool result = FALSE;
+
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    EXPECT_EQ(TRUE, result);
+
+    result = dtsProtocolCreateDiscoveryMessage(&iterator);
+
+    EXPECT_EQ(TRUE, result);
+
+    DUInt16 counter = 0;
+
+    // Discovery Packet Header
+    EXPECT_EQ(DTS_PROTOCOL_DISCOVERY_HEADER & 0x00FF, pRawBuffer[counter++]);
+    EXPECT_EQ(DTS_PROTOCOL_DISCOVERY_HEADER & 0xFF00, pRawBuffer[counter++]);
+}
+
+TEST_F(TestDtsProtocol, dtsProtocolResolveDiscoveryResponseMessage)
+{
+    DByte pRawBuffer[128];
+    DtsIterator iterator;
+    DBool result = FALSE;
+
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    EXPECT_EQ(TRUE, result);
+
+    result = dtsProtocolCreateDiscoveryMessage(&iterator);
+
+    EXPECT_EQ(TRUE, result);
+
+    DUInt16 counter = 0;
+
+    // Discovery Packet Header
+    EXPECT_EQ(DTS_PROTOCOL_DISCOVERY_HEADER, pRawBuffer[counter++]);
+
+    result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    EXPECT_EQ(TRUE, result);
+
+    result = dtsProtocolResolveDiscoveryMessage(&iterator);
+
+    EXPECT_EQ(TRUE, result);
 }

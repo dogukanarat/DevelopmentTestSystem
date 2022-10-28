@@ -10,7 +10,7 @@ TEST(DtsIteratorTest, dtsIteratorInitialize)
     DByte pRawBuffer[128];
     DtsIterator iterator;
 
-    DBool result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    DBool result = dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(TRUE, result);
 
@@ -23,7 +23,7 @@ TEST(DtsIteratorTest, dtsIteratorInitializeWithNull)
 {
     DtsIterator iterator;
 
-    DBool result = dtsIteratorInitialize(&iterator, NULL, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    DBool result = dtsIteratorInitialize(&iterator, NULL, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(FALSE, result);
 }
@@ -33,7 +33,7 @@ TEST(DtsIteratorTest, dtsIteratorInitializeWithZeroSize)
     DByte pRawBuffer[128];
     DtsIterator iterator;
 
-    DBool result = dtsIteratorInitialize(&iterator, pRawBuffer, 0, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    DBool result = dtsIteratorInitialize(&iterator, pRawBuffer, 0, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(FALSE, result);
 }
@@ -42,9 +42,26 @@ TEST(DtsIteratorTest, dtsIteratorInitializeWithNullIterator)
 {
     DByte pRawBuffer[128];
 
-    DBool result = dtsIteratorInitialize(NULL, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    DBool result = dtsIteratorInitialize(NULL, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     EXPECT_EQ(FALSE, result);
+}
+
+TEST(DtsIteratorTest, dtsIteratorGetSize)
+{
+    DByte pRawBuffer[128];
+    DtsIterator iterator;
+
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
+
+    for(int i = 0; i < 128; i++)
+    {
+        dtsIteratorWrite(&iterator, (DConstBytePointer)&i, 1);
+    }
+
+    DUInt32 nSize = dtsIteratorGetSize(&iterator);
+
+    EXPECT_EQ(128, nSize);
 }
 
 TEST(DtsIteratorTest, dtsIteratorWrite)
@@ -52,7 +69,7 @@ TEST(DtsIteratorTest, dtsIteratorWrite)
     DByte pRawBuffer[128];
     DtsIterator iterator;
 
-    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DByte pSource[128];
     DSize nSize = 128;
@@ -74,7 +91,7 @@ TEST(DtsIteratorTest, dtsIteratorWriteWithNull)
     DByte pRawBuffer[128];
     DtsIterator iterator;
 
-    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DSize nSize = 128;
 
@@ -88,7 +105,7 @@ TEST(DtsIteratorTest, dtsIteratorWriteWithZeroSize)
     DByte pRawBuffer[128];
     DtsIterator iterator;
 
-    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DByte pSource[128];
 
@@ -112,7 +129,7 @@ TEST(DtsIteratorTest, dtsIteratorWriteWithSmallChunks)
         pSource[i] = i;
     }
 
-    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pRawBuffer, 128, DTS_ITERATOR_WRITE, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     for(DSize i = 0; i < nSize; i++)
     {
@@ -141,7 +158,7 @@ TEST(DtsIteratorTest, dtsIteratorRead)
         pSource[i] = i;
     }
 
-    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DByte pDestination[128];
 
@@ -163,7 +180,7 @@ TEST(DtsIteratorTest, dtsIteratorReadWithNull)
     DSize nSize = 128;
     DtsIterator iterator;
 
-    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DBool result = dtsIteratorRead(&iterator, NULL, nSize);
 
@@ -175,7 +192,7 @@ TEST(DtsIteratorTest, dtsIteratorReadWithZeroSize)
     DByte pSource[128];
     DtsIterator iterator;
 
-    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     DByte pDestination[128];
 
@@ -199,7 +216,7 @@ TEST(DtsIteratorTest, dtsIteratorReadWithSmallChunks)
         pSource[i] = i;
     }
 
-    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_NO_BLOCK_SIZE);
+    dtsIteratorInitialize(&iterator, pSource, 128, DTS_ITERATOR_READ, DTS_ITERATOR_NO_BLOCK_SIZE);
 
     for(DSize i = 0; i < nSize; i++)
     {

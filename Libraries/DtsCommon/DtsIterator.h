@@ -3,7 +3,7 @@
 
 #include "DtsCommon/DtsCommon.h"
 
-#define DTS_NO_BLOCK_SIZE -1
+#define DTS_ITERATOR_NO_BLOCK_SIZE -1
 
 typedef enum
 {
@@ -30,6 +30,8 @@ DBool dtsIteratorInitialize(
     DInt32 nBlockSize
     );
 
+DUInt32 dtsIteratorGetSize(DtsIterator *self);
+DBool dtsIteratorReset(DtsIterator *self);
 DBool dtsIteratorWrite(DtsIterator *self, DConstBytePointer pValue, DSize nValueSize);
 DBool dtsIteratorRead(DtsIterator *self, DBytePointer pValue, DSize nValueSize);
 DBool dtsIteratorNext(DtsIterator *self, DBytePointer *ppValue);

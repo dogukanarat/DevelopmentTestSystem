@@ -55,6 +55,28 @@ DBool dtsIteratorInitialize(
     return result;
 }
 
+DUInt32 dtsIteratorGetSize(DtsIterator *self)
+{
+    return self->nCurrentIndex;
+}
+
+DBool dtsIteratorReset(DtsIterator *self)
+{
+    DBool result = FALSE;
+
+    if(self != NULL)
+    {
+        self->nCurrentIndex = 0;
+        result = TRUE;
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
 DBool dtsIteratorWrite(DtsIterator *self, DConstBytePointer pValue, DSize nValueSize)
 {
     DBool result = FALSE;

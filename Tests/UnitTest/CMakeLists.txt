@@ -29,6 +29,7 @@ add_executable(
     TestDtsUpdate.cpp
     TestDtsMonitor.cpp
     TestDtsProtocol.cpp
+    TestDtsServer.cpp
 )
 
 target_compile_definitions(DtsUnitTest PUBLIC CTEST)

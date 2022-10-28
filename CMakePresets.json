@@ -14,7 +14,8 @@
                 "CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/Binaries/${presetName}/Intermediate",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+                "CMAKE_OSX_ARCHITECTURES": "x86_64",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
 
             }
         },
@@ -30,7 +31,8 @@
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/Binaries/${presetName}/Output",
                 "CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/Binaries/${presetName}/Intermediate",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
             }
         }
     ],

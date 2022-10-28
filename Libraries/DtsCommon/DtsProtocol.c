@@ -16,6 +16,55 @@ DBool dtsProtocolSetHeader(DtsIterator* pIterator, DUInt16 nHeader)
     return result;
 }
 
+DBool dtsProtocolCreateDiscoveryMessage(DtsIterator* pIterator)
+{
+    DBool result = FALSE;
+
+    if (pIterator != NULL)
+    {
+        result = dtsProtocolSetHeader(pIterator, DTS_PROTOCOL_DISCOVERY_HEADER);
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
+DBool dtsProtocolResolveDiscoveryMessage(DtsIterator* pIterator)
+{
+    DBool result = FALSE;
+    DUInt16 nHeader = 0;
+
+    if (pIterator != NULL)
+    {
+        result = dtsIteratorRead(pIterator, (DBytePointer)&nHeader, sizeof(nHeader));
+
+        if (result == TRUE)
+        {
+            if (nHeader == DTS_PROTOCOL_DISCOVERY_HEADER)
+            {
+                result = TRUE;
+            }
+            else
+            {
+                result = FALSE;
+            }
+        }
+        else
+        {
+            result = FALSE;
+        }
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    return result;
+}
+
 DBool dtsProtocolSetValue(DtsIterator* pIterator, DConstVoidPointer pValue, DSize nValueSize)
 {
     DBool result = FALSE;
@@ -63,6 +112,8 @@ DBool dtsProtocolCreateMonitorMessage(DtsIterator* pIterator, const DtsParameter
             DTS_ITERATOR_FORWARD,
             sizeof(DtsParameter)
             );
+        
+        result = dtsProtocolSetHeader(pIterator, DTS_PROTOCOL_MONITOR_HEADER);
         
         while(dtsIteratorNext(&itParameters, (DBytePointer*)&pParameter) == TRUE)
         {
