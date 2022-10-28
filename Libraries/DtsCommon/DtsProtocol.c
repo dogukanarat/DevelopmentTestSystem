@@ -206,7 +206,7 @@ DBool dtsProtocolResolveMonitorMessage(DtsIterator *pIterator, DtsParameterContr
 
                 if(result == TRUE)
                 {
-                    dtsMemCopy(&pParameter->nData, &nData, nSize);
+                    dtsMemCopy((DVoidPointer)&pParameter->nData, (DVoidPointer)&nData, nSize);
                 }
 
                 
