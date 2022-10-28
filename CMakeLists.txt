@@ -24,6 +24,19 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("====== Building with coverage flags")
+
+    set(GCC_COVERAGE_COMPILE_FLAGS "--coverage -g -O0")
+    set(GCC_COVERAGE_LINK_FLAGS    "--coverage -g")
+
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+else(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("====== Building without coverage flags")
+endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
 add_subdirectory(Externals)
 add_subdirectory(Libraries)
 add_subdirectory(Applications)
